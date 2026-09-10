@@ -1,0 +1,30 @@
+# Terraform state - contains resource IDs and potentially sensitive data
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Provider plugin cache
+.terraform/
+.terraform.lock.hcl
+
+# Plan output files
+*.tfplan
+
+# Variable files that may contain secrets (keep terraform.tfvars tracked
+# only if you're certain it has no secrets - otherwise use .tfvars.example)
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Crash logs
+crash.log
+crash.*.log
+
+# SSH keys - never commit these
+*.pem
+*.key
+
+# OS files
+.DS_Store
