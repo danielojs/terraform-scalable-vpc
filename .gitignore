@@ -28,3 +28,6 @@ crash.*.log
 
 # OS files
 .DS_Store
+
+notes.md
+scalable-aws-vpc-project-guidance.md
