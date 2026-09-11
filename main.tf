@@ -97,3 +97,14 @@ module "tgw" {
   app_public_route_table_id  = module.vpcs["app"].public_route_table_id
   app_private_route_table_id = module.vpcs["app"].private_route_table_id
 }
+
+
+module "bastion" {
+  source = "./modules/ec2"
+
+  name_prefix      = var.project_name
+  key_name         = "universal-key"
+  vpc_id           = module.vpcs["bastion"].vpc_id
+  subnet_id        = module.vpcs["bastion"].public_subnet_ids["public_1"]
+  allowed_ssh_cidr = "112.215.224.48/32"
+}
