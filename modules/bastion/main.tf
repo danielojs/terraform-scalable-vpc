@@ -40,7 +40,7 @@ data "aws_ami" "ubuntu" {
 
 
 # EC2 instance for the bastion host
-resource "aws_instance" "bastion" {
+resource "aws_instance" "this" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t3.micro"
   key_name               = var.key_name
