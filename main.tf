@@ -100,7 +100,7 @@ module "tgw" {
 
 
 module "bastion" {
-  source = "./modules/ec2"
+  source = "./modules/bastion"
 
   name_prefix      = var.project_name
   key_name         = "universal-key"
