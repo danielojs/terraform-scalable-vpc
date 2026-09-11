@@ -12,3 +12,7 @@ output "transit_gateway_id" {
   description = "Transit Gateway ID"
   value       = module.tgw.transit_gateway_id
 }
+
+output "bastion_public_ip" {
+  value = module.bastion.public_ip
+}
