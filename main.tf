@@ -108,3 +108,23 @@ module "bastion" {
   subnet_id        = module.vpcs["bastion"].public_subnet_ids["public_1"]
   allowed_ssh_cidr = "112.215.224.48/32"
 }
+
+module "asg_alb" {
+  source = "./modules/asg-alb"
+
+  name_prefix = var.project_name
+  vpc_id      = module.vpcs["app"].vpc_id
+
+  public_subnet_ids = [
+    module.vpcs["app"].public_subnet_ids["public_1"],
+    module.vpcs["app"].public_subnet_ids["public_2"],
+  ]
+
+  private_subnet_ids = [
+    module.vpcs["app"].private_subnet_ids["private_1"],
+    module.vpcs["app"].private_subnet_ids["private_2"],
+  ]
+
+  bastion_vpc_cidr = module.vpcs["bastion"].vpc_cidr
+  key_name         = "universal-key"
+}

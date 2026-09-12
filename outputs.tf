@@ -16,3 +16,8 @@ output "transit_gateway_id" {
 output "bastion_public_ip" {
   value = module.bastion.public_ip
 }
+
+output "alb_dns_name" {
+  description = "Public DNS name of the Application Load Balancer"
+  value       = module.asg_alb.alb_dns_name
+}
