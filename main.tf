@@ -106,7 +106,7 @@ module "bastion" {
   key_name         = "universal-key"
   vpc_id           = module.vpcs["bastion"].vpc_id
   subnet_id        = module.vpcs["bastion"].public_subnet_ids["public_1"]
-  allowed_ssh_cidr = "110.136.32.38/32"
+  allowed_ssh_cidr = "140.213.132.32/32"
 }
 
 module "asg_alb" {
