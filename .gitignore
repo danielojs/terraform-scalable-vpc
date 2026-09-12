@@ -9,6 +9,7 @@
 
 # Plan output files
 *.tfplan
+tfplan
 
 # Variable files that may contain secrets (keep terraform.tfvars tracked
 # only if you're certain it has no secrets - otherwise use .tfvars.example)
