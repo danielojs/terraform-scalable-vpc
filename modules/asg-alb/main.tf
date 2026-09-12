@@ -44,7 +44,7 @@ resource "aws_vpc_security_group_ingress_rule" "app_http_from_alb" {
 
 resource "aws_vpc_security_group_ingress_rule" "app_ssh_from_bastion" {
   security_group_id = aws_security_group.app.id
-  cidr_ipv4         = var.bastion_vpc_cidr
+  cidr_ipv4         = var.bastion_cidr
   from_port         = 22
   to_port           = 22
   ip_protocol       = "tcp"

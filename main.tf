@@ -125,8 +125,8 @@ module "asg_alb" {
     module.vpcs["app"].private_subnet_ids["private_2"],
   ]
 
-  bastion_vpc_cidr = module.vpcs["bastion"].vpc_cidr
-  key_name         = "universal-key"
+  bastion_cidr = "${module.bastion.private_ip}/32"
+  key_name     = "universal-key"
 }
 
 module "dns" {

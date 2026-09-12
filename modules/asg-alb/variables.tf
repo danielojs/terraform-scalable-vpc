@@ -18,7 +18,7 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
-variable "bastion_vpc_cidr" {
+variable "bastion_cidr" {
   description = "Bastion VPC CIDR permitted to SSH to application instances through the Transit Gateway"
   type        = string
 }
