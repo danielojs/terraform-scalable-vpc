@@ -128,3 +128,12 @@ module "asg_alb" {
   bastion_vpc_cidr = module.vpcs["bastion"].vpc_cidr
   key_name         = "universal-key"
 }
+
+module "dns" {
+  source = "./modules/dns"
+
+  hosted_zone_name = var.hosted_zone_name
+  record_name      = var.app_record_name
+  alb_dns_name     = module.asg_alb.alb_dns_name
+  alb_zone_id      = module.asg_alb.alb_zone_id
+}

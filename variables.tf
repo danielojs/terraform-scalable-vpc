@@ -15,3 +15,15 @@ variable "project_name" {
   type        = string
   default     = "project02"
 }
+
+variable "hosted_zone_name" {
+  description = "Existing public Route 53 hosted-zone name"
+  type        = string
+  default     = "rezedev.site"
+}
+
+variable "app_record_name" {
+  description = "DNS record name for the application ALB"
+  type        = string
+  default     = "rezedev.site"
+}
