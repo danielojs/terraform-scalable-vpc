@@ -1,0 +1,25 @@
+{
+  "name": "Terraform AWS lab",
+  "build": { "dockerfile": "Dockerfile", "context": "." },
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1.1.4": { "version": "2.36.45" },
+    "ghcr.io/devcontainers/features/terraform:1.5.0": {
+      "version": "1.16.2",
+      "tflint": "none",
+      "terragrunt": "none"
+    }
+  },
+  "remoteUser": "vscode",
+  "remoteEnv": { "AWS_REGION": "ap-southeast-1", "AWS_DEFAULT_REGION": "ap-southeast-1", "AWS_PAGER": "" },
+  "postCreateCommand": "bash .devcontainer/verify-tools.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["HashiCorp.terraform"],
+      "settings": {
+        "[terraform]": { "editor.defaultFormatter": "HashiCorp.terraform", "editor.formatOnSave": true },
+        "[terraform-vars]": { "editor.defaultFormatter": "HashiCorp.terraform", "editor.formatOnSave": true },
+        "files.eol": "\n"
+      }
+    }
+  }
+}
