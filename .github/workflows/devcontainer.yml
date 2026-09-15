@@ -27,6 +27,7 @@ jobs:
         with:
           push: never
           runCmd: |
+            set -euo pipefail
             bash .devcontainer/verify-tools.sh
             shellcheck .devcontainer/*.sh
             bash .devcontainer/check-terraform.sh
