@@ -18,5 +18,5 @@
     }
   },
 
-  "postCreateCommand": "terraform --version && aws --version && gh --version"
+  "postCreateCommand": "bash .devcontainer/install-session-manager.sh && terraform --version && aws --version && gh --version"
 }
