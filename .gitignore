@@ -5,7 +5,7 @@
 
 # Provider plugin cache
 .terraform/
-.terraform.lock.hcl
+# Commit .terraform.lock.hcl to preserve provider versions and checksums.
 
 # Plan output files
 *.tfplan
@@ -33,3 +33,9 @@ crash.*.log
 notes.md
 scalable-aws-vpc-project-guidance.md
 keys/
+
+# Local credentials and shell secrets
+.aws/
+.env
+.env.*
+!.env.example
