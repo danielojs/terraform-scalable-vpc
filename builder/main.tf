@@ -34,6 +34,16 @@ variable "ubuntu_ami_id" {
   default     = "ami-0ba4172b23e57d5a8"
 }
 
+variable "bookstack_http_cidr" {
+  description = "IPv4 CIDR allowed to access BookStack over HTTP, such as your public IP followed by /32."
+  type        = string
+
+  validation {
+    condition     = can(cidrnetmask(var.bookstack_http_cidr))
+    error_message = "Provide a valid IPv4 CIDR, such as 203.0.113.10/32."
+  }
+}
+
 resource "aws_vpc" "builder" {
   cidr_block           = "10.90.0.0/16"
   enable_dns_support   = true
@@ -69,12 +79,21 @@ resource "aws_route_table_association" "builder" {
   route_table_id = aws_route_table.builder.id
 }
 
-# Session Manager uses outbound connections; no inbound ports are needed.
+# Session Manager uses outbound connections; BookStack HTTP access is allowed below.
 resource "aws_security_group" "builder" {
   name        = "project02-builder-sg"
   description = "Standalone builder accessed through AWS Session Manager"
   vpc_id      = aws_vpc.builder.id
   tags        = { Name = "project02-builder-sg" }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "bookstack_http" {
+  security_group_id = aws_security_group.builder.id
+  description       = "BookStack HTTP access"
+  cidr_ipv4         = var.bookstack_http_cidr
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
 }
 
 resource "aws_vpc_security_group_egress_rule" "builder" {

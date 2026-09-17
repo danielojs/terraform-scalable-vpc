@@ -3,6 +3,8 @@
 Independent Terraform root for a standalone Ubuntu 24.04 instance in Singapore.
 State uses `s3://kami-dev-tfstate/builder/terraform.tfstate`; the parent stack is separate.
 Run Terraform from this directory, not the repository root.
+Set `bookstack_http_cidr` to your browser's public IPv4 address followed by `/32`
+when prompted by `terraform plan`, or save it in a local `terraform.tfvars` file.
 
 ```sh
 terraform init
@@ -18,8 +20,9 @@ There is no Auto Scaling group or load balancer attachment.
 
 Connect through EC2 > Instances > project02-bookstack-builder > Connect >
 Session Manager, or use the `connect_command` output (requires the local Session
-Manager plugin). No inbound security-group rules are enabled. The public IPv4
-address provides outbound package repository and Systems Manager connectivity.
+Manager plugin). Inbound HTTP (TCP port 80) is allowed from `bookstack_http_cidr`
+for testing BookStack in your browser. The public IPv4 address also provides
+outbound package repository and Systems Manager connectivity.
 
 The builder has 2 GiB RAM, 20 GiB encrypted gp3 storage, IMDSv2, standard CPU
 credits, and API termination protection. Its root volume survives termination.
