@@ -60,13 +60,12 @@ resource "aws_lb_target_group" "gitea" {
   target_type = "instance"
   vpc_id      = module.vpcs["app"].vpc_id
 
-  # Accept the installation page and normal page redirects during initial setup.
-  # After installation, switch to /api/healthz with matcher 200.
+  # Check Gitea's application health after the installation has completed.
   health_check {
-    path                = "/"
+    path                = "/api/healthz"
     protocol            = "HTTP"
     port                = "traffic-port"
-    matcher             = "200-399"
+    matcher             = "200"
     healthy_threshold   = 2
     unhealthy_threshold = 3
     interval            = 30
