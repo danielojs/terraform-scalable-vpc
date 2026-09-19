@@ -17,3 +17,13 @@ output "app_security_group_id" {
   description = "Security group ID of application instances"
   value       = aws_security_group.app.id
 }
+
+output "alb_arn" {
+  description = "ARN of the shared application load balancer"
+  value       = aws_lb.this.arn
+}
+
+output "http_listener_arn" {
+  description = "HTTP listener ARN for application-specific routing rules"
+  value       = aws_lb_listener.http.arn
+}

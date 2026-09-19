@@ -10,5 +10,5 @@ output "alb_dns_name" {
 
 output "app_url" {
   description = "Public URL of the application DNS record"
-  value       = "http://${module.dns.record_fqdn}"
+  value       = "https://${module.dns.record_fqdn}"
 }
