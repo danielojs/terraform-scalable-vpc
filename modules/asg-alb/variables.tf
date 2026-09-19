@@ -18,18 +18,14 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
-variable "bastion_cidr" {
-  description = "Bastion VPC CIDR permitted to SSH to application instances through the Transit Gateway"
-  type        = string
-}
-
-variable "key_name" {
-  description = "Existing EC2 key pair name used for SSH access"
-  type        = string
-}
-
 variable "instance_type" {
   description = "EC2 instance type for application instances"
   type        = string
   default     = "t3.micro"
+}
+
+variable "ssm_role_name" {
+  description = "Existing EC2 role granting AmazonSSMManagedInstanceCore permissions"
+  type        = string
+  default     = "ec2-ssm-role"
 }

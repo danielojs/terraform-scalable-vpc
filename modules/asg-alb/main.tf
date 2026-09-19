@@ -42,14 +42,6 @@ resource "aws_vpc_security_group_ingress_rule" "app_http_from_alb" {
   ip_protocol                  = "tcp"
 }
 
-resource "aws_vpc_security_group_ingress_rule" "app_ssh_from_bastion" {
-  security_group_id = aws_security_group.app.id
-  cidr_ipv4         = var.bastion_cidr
-  from_port         = 22
-  to_port           = 22
-  ip_protocol       = "tcp"
-}
-
 resource "aws_vpc_security_group_egress_rule" "app_all" {
   security_group_id = aws_security_group.app.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -111,13 +103,25 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+data "aws_iam_role" "ssm" {
+  name = var.ssm_role_name
+}
+
+resource "aws_iam_instance_profile" "app" {
+  name = "${var.name_prefix}-app-ssm"
+  role = data.aws_iam_role.ssm.name
+}
+
 resource "aws_launch_template" "this" {
   name_prefix            = "${var.name_prefix}-app-"
   image_id               = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
-  key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.app.id]
   update_default_version = true
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.app.name
+  }
 
   user_data = base64encode(<<-EOF
     #!/bin/bash

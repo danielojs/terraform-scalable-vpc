@@ -1,32 +1,10 @@
-# Root module: wires together all child modules for Project 02.
-#
-# Build/apply order (dependency chain, top to bottom):
-#   1. vpc      - both VPCs, subnets, IGWs, NAT, route tables (no dependencies)
-#   2. tgw      - Transit Gateway + attachments (depends on: vpc, for VPC/subnet IDs)
-#   3. bastion  - EC2 bastion host (depends on: vpc, for subnet + SG placement)
-#   4. asg-alb  - Launch Template, ASG, Target Group, ALB (depends on: vpc, tgw for routing)
-#   5. dns      - Route 53 record aliasing to ALB (depends on: asg-alb, for ALB DNS name)
+# Root module: application VPC, application compute/load balancer, and DNS.
+# Administrative access uses Systems Manager through the application NAT gateway.
 
 module "vpcs" {
   source = "./modules/vpc"
 
   for_each = {
-    # VPC 1
-    bastion = {
-      cidr_block = "192.168.0.0/16"
-      public     = true
-
-      public_subnets = {
-        public_1 = {
-          cidr = "192.168.1.0/24"
-          az   = "ap-southeast-1a"
-        }
-      }
-
-      private_subnets = {}
-    }
-
-    # VPC 2
     app = {
       cidr_block = "172.20.0.0/16"
       public     = true
@@ -68,47 +46,6 @@ module "vpcs" {
 }
 
 
-module "tgw" {
-  source = "./modules/tgw"
-
-  name_prefix = var.project_name
-
-
-  bastion_vpc_id   = module.vpcs["bastion"].vpc_id
-  bastion_vpc_cidr = module.vpcs["bastion"].vpc_cidr
-
-  # The bastion VPC currently has just one public subnet
-  bastion_attachment_subnet_ids = [
-    module.vpcs["bastion"].public_subnet_ids["public_1"]
-  ]
-
-  bastion_route_table_id = module.vpcs["bastion"].public_route_table_id
-
-
-  app_vpc_id   = module.vpcs["app"].vpc_id
-  app_vpc_cidr = module.vpcs["app"].vpc_cidr
-
-  # A TGW attachment needs one subnet per AZ
-  app_attachment_subnet_ids = [
-    module.vpcs["app"].private_subnet_ids["private_1"],
-    module.vpcs["app"].private_subnet_ids["private_2"],
-  ]
-
-  app_public_route_table_id  = module.vpcs["app"].public_route_table_id
-  app_private_route_table_id = module.vpcs["app"].private_route_table_id
-}
-
-
-module "bastion" {
-  source = "./modules/bastion"
-
-  name_prefix      = var.project_name
-  key_name         = "universal-key"
-  vpc_id           = module.vpcs["bastion"].vpc_id
-  subnet_id        = module.vpcs["bastion"].public_subnet_ids["public_1"]
-  allowed_ssh_cidr = "0.0.0.0/0"
-}
-
 module "asg_alb" {
   source = "./modules/asg-alb"
 
@@ -125,8 +62,6 @@ module "asg_alb" {
     module.vpcs["app"].private_subnet_ids["private_2"],
   ]
 
-  bastion_cidr = "${module.bastion.private_ip}/32"
-  key_name     = "universal-key"
 }
 
 module "dns" {
