@@ -102,7 +102,7 @@ resource "aws_instance" "gitea" {
     # A new Ubuntu image must not silently replace this manually configured host.
     # OS updates are maintained in place; an AMI migration is a deliberate task.
     ignore_changes  = [ami]
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = { Name = "${var.project_name}-gitea" }
@@ -116,7 +116,7 @@ resource "aws_ebs_volume" "gitea_data" {
   encrypted         = true
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = { Name = "${var.project_name}-gitea-data" }
